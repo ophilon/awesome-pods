@@ -11,8 +11,7 @@
 [Org]
 	[Org."Core maintainers"]
 		people = [
-			"aiordache",
-			"glours"
+			"ophil"
 		]
 	[Org.Alumni]
 		people = [
@@ -26,12 +25,7 @@
 
 	# ADD YOURSELF HERE IN ALPHABETICAL ORDER
 
-	[people.aiordache]
-	Name = "Anca iordache"
-	Email = "anca.iordache@docker.com"
-	GitHub = "aiordache"
-
-	[people.glours]
-	Name = "Guillaume Lours"
-	Email = "guillaume.lours@docker.com"
-	GitHub = "glours"
+	[people.ophil]
+	Name = "Oleg P. Philon"
+	Email = "ophil44@gmail.com"
+	GitHub = "ophilon"

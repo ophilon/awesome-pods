@@ -1,24 +1,24 @@
-# Awesome Compose [![Awesome](https://awesome.re/badge.svg)](https://awesome.re)
+# Awesome Podman Pods [![Awesome](https://awesome.re/badge.svg)](https://awesome.re)
 
 ![logo](awesome-compose.jpg)
 
-> A curated list of Docker Compose samples.
+> A curated list of Podman Pods samples.
 
-These samples provide a starting point for how to integrate different services using a Compose file and to manage their deployment with Docker Compose.
+These samples provide a starting point for how to integrate different services using a Pod: manifest and to manage their deployment with Podman Pods.
 
 > **Note**
-> The following samples are intended for use in local development environments such as project setups, tinkering with software stacks, etc. These samples must not be deployed in production environments.
+> The following saples are intended for use in local development environments such as project setups, tinkering with software stacks, etc. These samples must not be deployed in production environments.
 
 <!--lint disable awesome-toc-->
 ## Contents
 
-- [Samples of Docker Compose applications with multiple integrated services](#samples-of-docker-compose-applications-with-multiple-integrated-services).
+- [Samples of Podman Pods applications with multiple integrated services](#samples-of-docker-compose-applications-with-multiple-integrated-services).
 - [Single service samples](#single-service-samples).
 - [Basic setups for different platforms (not production ready - useful for personal use)](#basic-setups-for-different-platforms-not-production-ready---useful-for-personal-use).
 
-## Samples of Docker Compose applications with multiple integrated services
+## Samples of Podman Pods applications with multiple integrated services
 
-<a href="https://docs.docker.com/desktop/wasm/"><img src="icon_wasm.svg" alt="Docker + wasm" height="30" align="top"/></a> Icon indicates Sample is compatible with [Docker+Wasm](https://docs.docker.com/desktop/wasm/).
+<a href="https://docs.docker.com/desktop/wasm/"><img src="icon_wasm.svg" alt="Podman + wasm" height="30" align="top"/></a> Icon indicates Sample is compatible with [Podman+Wasm](https://docs.docker.com/desktop/wasm/).
 
 - [`ASP.NET / MS-SQL`](aspnet-mssql) - Sample ASP.NET core application
 with MS SQL server database.
@@ -49,8 +49,8 @@ application with a Rust backend and a Postgres database.
 - [`React / Nginx`](react-nginx) - Sample React application with Nginx.
 - [`Spring / PostgreSQL`](spring-postgres) - Sample Java application
 with Spring framework and a Postgres database.
-- [`WasmEdge / MySQL / Nginx`](wasmedge-mysql-nginx) - Sample Wasm-based web application with a static HTML frontend, using a MySQL (MariaDB) database. The frontend connects to a Wasm microservice written in Rust, that runs using the WasmEdge runtime.&nbsp;<a href="wasmedge-mysql-nginx"><img src="icon_wasm.svg" alt="Compatible with Docker+wasm" height="30" align="top"/></a>
-- [`WasmEdge / Kafka / MySQL`](wasmedge-kafka-mysql) - Sample Wasm-based microservice that subscribes to a Kafka (Redpanda) queue topic, and transforms and saves any incoming message into a MySQL (MariaDB) database.&nbsp;<a href="wasmedge-kafka-mysql"><img src="icon_wasm.svg" alt="Compatible with Docker+wasm" height="30" align="top"/></a>
+- [`WasmEdge / MySQL / Nginx`](wasmedge-mysql-nginx) - Sample Wasm-based web application with a static HTML frontend, using a MySQL (MariaDB) database. The frontend connects to a Wasm microservice written in Rust, that runs using the WasmEdge runtime.&nbsp;<a href="wasmedge-mysql-nginx"><img src="icon_wasm.svg" alt="Compatible with Podman+wasm" height="30" align="top"/></a>
+- [`WasmEdge / Kafka / MySQL`](wasmedge-kafka-mysql) - Sample Wasm-based microservice that subscribes to a Kafka (Redpanda) queue topic, and transforms and saves any incoming message into a MySQL (MariaDB) database.&nbsp;<a href="wasmedge-kafka-mysql"><img src="icon_wasm.svg" alt="Compatible with Podman+wasm" height="30" align="top"/></a>
 
 ## Single service samples
 
@@ -81,15 +81,15 @@ with Spring framework and a Postgres database.
 ## Getting started
 
 These instructions will get you through the bootstrap phase of creating and
-deploying samples of containerized applications with Docker Compose.
+deploying samples of containerized applications with Podman Pods.
 
 ### Prerequisites
 
-- Make sure that you have Docker and Docker Compose installed
+- Make sure that you have Podman and Podman Pods installed
   - Windows or macOS:
-    [Install Docker Desktop](https://www.docker.com/get-started)
-  - Linux: [Install Docker](https://www.docker.com/get-started) and then
-    [Docker Compose](https://github.com/docker/compose)
+    [Install Podman Desktop](https://www.docker.com/get-started)
+  - Linux: [Install Podman](https://www.docker.com/get-started) and then
+    [Podman Pods](https://github.com/docker/compose)
 - Download some or all of the samples from this repository.
 
 ### Running a sample
@@ -99,7 +99,7 @@ describes the configuration of service components. All samples can be run in
 a local environment by going into the root directory of each one and executing:
 
 ```console
-docker compose up -d
+podman-compose up -d
 ```
 
 Check the `README.md` of each sample to get more details on the structure and
@@ -107,15 +107,15 @@ what is the expected output.
 To stop and remove all containers of the sample application run:
 
 ```console
-docker compose down
+podman-compose down
 ```
 
 ### Quickstart guides
 
-In addition to all the ready to run Compose samples listed above the folder [official-documentation-samples](official-documentation-samples/README.md) contains quickstart guides. Each of these step by step guides explain which files need to be created to build and run a Docker Compose application.
+In addition to all the ready to run Compose samples listed above the folder [official-documentation-samples](official-documentation-samples/README.md) contains quickstart guides. Each of these step by step guides explain which files need to be created to build and run a Podman Pods application.
 
 <!--lint disable awesome-toc-->
 ## Contribute
 
-We welcome examples that help people understand how to use Docker Compose for
+We welcome examples that help people understand how to use Podman Pods for
 common applications. Check the [Contribution Guide](CONTRIBUTING.md) for more details. 

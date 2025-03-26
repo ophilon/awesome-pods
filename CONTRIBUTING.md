@@ -3,8 +3,114 @@
 Contributions should be made via pull requests. Pull requests will be reviewed
 by one or more maintainers and merged when acceptable.
 
-The goal of the Awesome Compose is to provide a curated list of application 
-samples that can be easily deployed with [Docker Compose](https://github.com/docker/compose).
+The goal of the Awesome pods is to provide a curated list of application 
+samples that can be easily deployed with [podman kube play](https://github.com/ophilon/awesome-pods).
+
+## Two ways migrate from compose.yaml to kube.yaml
+
+This project started as fork of [Docker Compose](https://github.com/docker/compose). Authors did a great job, original code saved in the compose branch - you can any time checkout it. However, all compose.yaml configs kept and sometimes will work correctly with `podman-compose` command. The status of [podman-compose project](https://github.com/containers/podman-compose) well explained by [Matthew Heon](https://www.redhat.com/en/blog/podman-compose-docker-compose). The power of podman it's compatibility with some k8s API's, which allows smooth migration to kubernetes. So, let's start accustom yourself to brave new world of kuber.
+
+### 1. Create pod and add containers via podman commands:
+
+1. for convenience, move app specific variables from compose.yaml into .env files, for example:
+
+```
+$ cat .env.db 
+MYSQL_ROOT_PASSWORD=secret
+MYSQL_DATABASE=mydb
+MYSQL_USER=myuser
+MYSQL_PASSWORD=mypassword
+```
+
+2. create pod
+
+```
+$ podman pod create --name wpod -p 8080:80
+```
+
+3. add containers
+
+```
+$ podman run -d --pod wpod --env-file .env.db --name=db docker.io/library/mariadb:latest
+$ podman run -d --restart=always --pod=wpod --env-file .env.wp --name=web docker.io/library/wordpress:latest
+```
+
+4. check pod status
+
+```
+$ podman ps -ap
+CONTAINER ID  IMAGE                               COMMAND               CREATED         STATUS         PORTS                 NAMES               POD ID        PODNAME
+843b257ea988  localhost/podman-pause:4.9.3-0                            45 minutes ago  Up 45 minutes  0.0.0.0:8080->80/tcp  ae8541531313-infra  ae8541531313  wpod
+fc3578afbc60  docker.io/library/mariadb:latest    mariadbd              45 minutes ago  Up 45 minutes  0.0.0.0:8080->80/tcp  wpod-db             ae8541531313  wpod
+c5419ad8f275  docker.io/library/wordpress:latest  apache2-foregroun...  45 minutes ago  Up 45 minutes  0.0.0.0:8080->80/tcp  wpod-web            ae8541531313  wpod
+```
+
+5. generate kube.yaml file
+
+```
+$ podman generate kube wpod|tee kube.yaml
+```
+
+6. generation kube manifest possible both on running and stopped pod. However, to check new config you should delete running pod, and possibly, to prevent creds changes, delete persistent volumes
+
+```
+$ podman pod rm wpod
+$ podman volume ls
+$ podman volume rm wpod-db-data wpod-web-data 
+```
+
+7. run podman kube play kube.yaml
+
+```
+$ podman kube play kube.yaml
+```
+
+### 2. Create new kube.yaml from below template
+
+```
+$ cat kube.template.yaml 
+# Save the output of this file and use kubectl create -f to import
+# it into Kubernetes.
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app: appname
+  name: podname
+spec:
+  containers:
+  - args:
+    - mariadbd
+    env:
+    - name: VAR1
+      value: val1
+    image: docker.io/library/mariadb:latest
+    name: db
+    ports:
+    - containerPort: 80
+      hostPort: 8080
+    volumeMounts:
+    - mountPath: /var/lib/mysql
+      name: data-pvc
+  - args:
+    - apache2-foreground
+    env:
+    - name: VAR2
+      value: value2
+    image: docker.io/library/wordpress:latest
+    name: web
+    volumeMounts:
+    - mountPath: /var/www/html
+      name: web-pvc
+  restartPolicy: Always
+  volumes:
+  - name: data-pvc
+    persistentVolumeClaim:
+      claimName: data
+  - name: web-pvc
+    persistentVolumeClaim:
+      claimName: web
+```
 
 ## Missing an example? 
 
@@ -14,9 +120,7 @@ Before submitting a new application, check if there isn't already application sa
 
 If there is one, consider updating it instead of creating a new one.
  
-If you would like to submit a new application example, please start by submitting a proposal as an issue.
-The maintainers will then use this issue to discuss what the most valuable example for the application,
- technology, language, or framework would be.
+If you would like to submit a new application example, please start by submitting a proposal as an issue. The maintainers will then use this issue to discuss what the most valuable example for the application, technology, language, or framework would be.
 
 After the choice has been made, you can submit a pull request with the example remembering to:
 - include an example README.md to describe the application and explain how to run/use the sample.
