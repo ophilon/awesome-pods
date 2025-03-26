@@ -7,9 +7,7 @@ Project structure:
 .
 ├── compose.yaml
 ├── kube.yaml
-├── README.compose.md
 └── README.md
-
 ```
 
 [_kube.yaml_](kube.yaml)

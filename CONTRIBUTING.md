@@ -32,7 +32,7 @@ $ podman pod create --name wpod -p 8080:80
 
 ```
 $ podman run -d --pod wpod --env-file .env.db --name=db docker.io/library/mariadb:latest
-$ podman run -d --restart=always --pod=wpod --env-file .env.wp --name=web docker.io/library/wordpress:latest
+$ podman run -d --pod=wpod --env-file .env.wp --name=web docker.io/library/wordpress:latest
 ```
 
 4. check pod status
