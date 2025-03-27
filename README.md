@@ -1,10 +1,10 @@
 # Awesome Podman Pods [![Awesome](https://awesome.re/badge.svg)](https://awesome.re)
 
-![logo](awesome-compose.jpg)
+![logo](awesome-pods.jpg)
 
-> A curated list of Podman Pods samples.
+### A curated list of Podman Pods samples.
 
-These samples provide a starting point for how to integrate different services using a Pod manifest and to manage their deployment with Podman Pods.
+These samples provide a starting point for how to integrate different services using `kube.yaml` manifest and to manage their deployment with `podman kube play` or in any **kubernetes environment**.
 
 > **Note**
 > The following samples are intended for use in local development environments such as project setups, tinkering with software stacks, etc. These samples must not be deployed in production environments.
