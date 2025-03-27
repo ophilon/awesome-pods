@@ -1,21 +1,19 @@
 # Contributing
 
-Contributions should be made via pull requests. Pull requests will be reviewed
-by one or more maintainers and merged when acceptable.
+Contributions should be made via pull requests. Pull requests will be reviewed by one or more maintainers and merged when acceptable.
 
-The goal of the Awesome pods is to provide a curated list of application 
-samples that can be easily deployed with [podman kube play](https://github.com/ophilon/awesome-pods).
+The goal of the **Awesome pods** is to provide a curated list of application samples that can be easily deployed with [podman kube play](https://docs.podman.io/en/latest/markdown/podman-kube.1.html).
 
 ## Two ways migrate from compose.yaml to kube.yaml
 
-This project started as fork of [Docker Compose](https://github.com/docker/compose). Authors did a great job, original code saved in the compose branch - you can any time checkout it. However, all compose.yaml configs kept and sometimes will work correctly with `podman-compose` command. The status of [podman-compose project](https://github.com/containers/podman-compose) well explained by [Matthew Heon](https://www.redhat.com/en/blog/podman-compose-docker-compose). The power of podman it's compatibility with some k8s API's, which allows smooth migration to kubernetes. So, let's start accustom yourself to brave new world of kuber.
+This project started as fork of [Docker Compose](https://github.com/docker/compose). Authors did a great job, original code saved in the **compose** branch - you can check it out any time. However, all compose.yaml configs kept and sometimes will work correctly with `podman-compose` command. The status of [podman-compose project](https://github.com/containers/podman-compose) well explained by [Matthew Heon](https://www.redhat.com/en/blog/podman-compose-docker-compose). The power of podman it's compatibility with some k8s API's, which allows smooth migration to kubernetes. So, let's start accustom yourself to brave new world of kuber.
 
 ### 1. Create pod and add containers via podman commands:
 
 1. for convenience, move app specific variables from compose.yaml into .env files, for example:
 
 ```
-$ cat .env.db 
+$ cat .env.db
 MYSQL_ROOT_PASSWORD=secret
 MYSQL_DATABASE=mydb
 MYSQL_USER=myuser
@@ -56,7 +54,7 @@ $ podman generate kube wpod|tee kube.yaml
 ```
 $ podman pod rm wpod
 $ podman volume ls
-$ podman volume rm wpod-db-data wpod-web-data 
+$ podman volume rm wpod-db-data wpod-web-data
 ```
 
 7. run podman kube play kube.yaml
@@ -68,7 +66,7 @@ $ podman kube play kube.yaml
 ### 2. Create new kube.yaml from below template
 
 ```
-$ cat kube.template.yaml 
+$ cat kube.template.yaml
 # Save the output of this file and use kubectl create -f to import
 # it into Kubernetes.
 apiVersion: v1
@@ -112,14 +110,14 @@ spec:
       claimName: web
 ```
 
-## Missing an example? 
+## Missing an example?
 
-You can request a new example of an application by submitting an issue to our GitHub repository. 
+You can request a new example of an application by submitting an issue to our GitHub repository.
 
 Before submitting a new application, check if there isn't already application sample matching your need.
 
 If there is one, consider updating it instead of creating a new one.
- 
+
 If you would like to submit a new application example, please start by submitting a proposal as an issue. The maintainers will then use this issue to discuss what the most valuable example for the application, technology, language, or framework would be.
 
 After the choice has been made, you can submit a pull request with the example remembering to:

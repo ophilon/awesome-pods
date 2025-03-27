@@ -4,10 +4,10 @@
 
 > A curated list of Podman Pods samples.
 
-These samples provide a starting point for how to integrate different services using a Pod: manifest and to manage their deployment with Podman Pods.
+These samples provide a starting point for how to integrate different services using a Pod manifest and to manage their deployment with Podman Pods.
 
 > **Note**
-> The following saples are intended for use in local development environments such as project setups, tinkering with software stacks, etc. These samples must not be deployed in production environments.
+> The following samples are intended for use in local development environments such as project setups, tinkering with software stacks, etc. These samples must not be deployed in production environments.
 
 <!--lint disable awesome-toc-->
 ## Contents
@@ -61,10 +61,10 @@ with Spring framework and a Postgres database.
 - [`PHP`](apache-php)
 - [`Traefik`](traefik-golang)
 - [`Django`](django)
-- [`Minecraft server`](https://github.com/docker/awesome-compose/tree/master/minecraft)
-- [`Plex`](https://github.com/docker/awesome-compose/tree/master/plex)
-- [`Portainer`](https://github.com/docker/awesome-compose/tree/master/portainer)
-- [`Wireguard`](https://github.com/docker/awesome-compose/tree/master/wireguard)
+- [`Minecraft server`](minecraft)
+- [`Plex`](plex)
+- [`Portainer`](portainer)
+- [`Wireguard`](wireguard)
 - [`FastAPI`](fastapi)
 
 ## Basic setups for different platforms (not production ready - useful for personal use)
@@ -85,21 +85,21 @@ deploying samples of containerized applications with Podman Pods.
 
 ### Prerequisites
 
-- Make sure that you have Podman and Podman Pods installed
+- Make sure that you have Podman or Podman Desktop installed
   - Windows or macOS:
-    [Install Podman Desktop](https://www.docker.com/get-started)
-  - Linux: [Install Podman](https://www.docker.com/get-started) and then
-    [Podman Pods](https://github.com/docker/compose)
+    [Install Podman Desktop](https://podman-desktop.io/)
+  - Linux: [Install Podman](https://podman.io/) and then
+    [podman-compose](https://github.com/containers/podman-compose)
 - Download some or all of the samples from this repository.
 
 ### Running a sample
 
-The root directory of each sample contains the `compose.yaml` which
-describes the configuration of service components. All samples can be run in
+The root directory of each sample contains the `compose.yaml` from [awesome-compose](https://github.com/docker/awesome-compose), and corresponding `kube.yaml` manifest. The latter file can be run in any numerous [kubernetes distributions](https://www.cncf.io/training/certification/software-conformance/) or within `podman pod`. All samples can be run in
 a local environment by going into the root directory of each one and executing:
 
 ```console
-podman-compose up -d
+podman kube play kube.yaml
+podman ps -ap
 ```
 
 Check the `README.md` of each sample to get more details on the structure and
@@ -107,7 +107,8 @@ what is the expected output.
 To stop and remove all containers of the sample application run:
 
 ```console
-podman-compose down
+podman pod stop pod_name
+podman pod rm pod_name
 ```
 
 ### Quickstart guides
