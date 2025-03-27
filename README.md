@@ -12,10 +12,10 @@ These samples provide a starting point for how to integrate different services u
 <!--lint disable awesome-toc-->
 ## Contents
 
-- [Samples of Podman Pods applications with multiple integrated services](#samples).
-- [Single service samples](#single).
-- [Basic setups for different platforms (not production ready - useful for personal use)](#basic).
-- [Getting started](#getting).
+- [Samples of Podman Pods applications with multiple integrated services](#samples-of-podman-pods-applications-with-multiple-integrated-services).
+- [Single service samples](#single-service-samples).
+- [Basic setups for different platforms (not production ready - useful for personal use)](#basic-setups-for-different-platforms-not-production-ready---useful-for-personal-use).
+- [Getting started](#getting-started).
 
 ## Samples of Podman Pods applications with multiple integrated services
 
