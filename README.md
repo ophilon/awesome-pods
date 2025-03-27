@@ -12,13 +12,14 @@ These samples provide a starting point for how to integrate different services u
 <!--lint disable awesome-toc-->
 ## Contents
 
-- [Samples of Podman Pods applications with multiple integrated services](#samples-of-docker-compose-applications-with-multiple-integrated-services).
-- [Single service samples](#single-service-samples).
-- [Basic setups for different platforms (not production ready - useful for personal use)](#basic-setups-for-different-platforms-not-production-ready---useful-for-personal-use).
+- [Samples of Podman Pods applications with multiple integrated services](#samples).
+- [Single service samples](#single).
+- [Basic setups for different platforms (not production ready - useful for personal use)](#basic).
+- [Getting started](#getting).
 
 ## Samples of Podman Pods applications with multiple integrated services
 
-<a href="https://docs.docker.com/desktop/wasm/"><img src="icon_wasm.svg" alt="Podman + wasm" height="30" align="top"/></a> Icon indicates Sample is compatible with [Podman+Wasm](https://docs.docker.com/desktop/wasm/).
+<a href="https://developers.redhat.com/articles/2023/12/06/unlock-webassembly-workloads-podman-macos-and-windows#"><img src="icon_wasm.svg" alt="Podman + wasm" height="30" align="top"/></a> Icon indicates Sample is compatible with [Podman+Wasm](https://developers.redhat.com/articles/2023/12/06/unlock-webassembly-workloads-podman-macos-and-windows#).
 
 - [`ASP.NET / MS-SQL`](aspnet-mssql) - Sample ASP.NET core application
 with MS SQL server database.
