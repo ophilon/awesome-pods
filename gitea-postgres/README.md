@@ -6,49 +6,63 @@ Project structure:
 ```
 .
 ├── compose.yaml
+├── gitea.kube
+├── gitea-kube.yaml
+├── pod.yaml
 └── README.md
 ```
 
-[_compose.yaml_](compose.yaml)
+[_pod.yaml_](pod.yaml)
 ```
+name: gitea
 services:
   gitea:
     image: gitea/gitea:latest
+    environment:
+      - DB_TYPE=postgres
+      - DB_HOST=db:5432
+      - DB_NAME=gitea
+      - DB_USER=gitea
+      - DB_PASSWD=gitea
+    volumes:
+      - git_data:/data
     ports:
       - 3000:3000
-    ...
   db:
     image: postgres:alpine
     environment:
-    ...
+      - POSTGRES_USER=gitea
+      - POSTGRES_PASSWORD=gitea
+      - POSTGRES_DB=gitea
+    volumes:
+      - db_data:/var/lib/postgresql/data
+volumes:
+  db_data:
+  git_data:
 ```
 
-When deploying this setup, docker compose maps the gitea container port 3000 to
+Let's try [podlet tool](https://github.com/containers/podlet) to automate migration process from `docker compose` to `podman kube play` config. First, install `podlet` according to the [installation instructions](https://github.com/containers/podlet/blob/main/docs/installation.md).
+Then convert the pod.yaml to `podman kube play` manifest:
+
+```
+$ podlet -f. compose --kube pod.yaml
+Wrote to file: ./gitea.kube
+Wrote to file: ./gitea-kube.yaml
+```
+
+check generated file:
+
+```
+$ podman kube play gitea-kube.yaml
+$ podman ps -ap
+CONTAINER ID  IMAGE                                    COMMAND               CREATED         STATUS         PORTS                             NAMES               POD ID        PODNAME
+03ab6362206b  localhost/podman-pause:5.4.0-1739232000                        56 seconds ago  Up 57 seconds  0.0.0.0:3000->3000/tcp            9e01104d3505-infra  9e01104d3505  gitea
+62c44db05dca  docker.io/gitea/gitea:latest             /usr/bin/s6-svsca...  56 seconds ago  Up 57 seconds  0.0.0.0:3000->3000/tcp, 22/tcp    gitea-gitea         9e01104d3505  gitea
+a999254d0928  docker.io/library/postgres:alpine        postgres              56 seconds ago  Up 57 seconds  0.0.0.0:3000->3000/tcp, 5432/tcp  gitea-db            9e01104d3505  gitea
+```
+
+When deploying this setup, podman maps the gitea container port 3000 to
 the same port of the host as specified in the compose file.
-
-## Deploy with docker compose
-
-```
-$ docker compose up -d
-Creating network "gitea-postgres_default" with the default driver
-Creating gitea-postgres_db_1 ... done
-Creating gitea-postgres_gitea_1 ... done
-Attaching to gitea-postgres_db_1, gitea-postgres_gitea_1
-....
-Starting gitea-postgres_db_1 ... done
-Starting gitea-postgres_gitea_1 ... done
-```
-
-
-## Expected result
-
-Check containers are running and the port mapping:
-```
-$ docker ps
-CONTAINER ID        IMAGE                COMMAND                  CREATED             STATUS              PORTS                          NAMES
-2f5624043da9        gitea/gitea:latest   "/usr/bin/entrypoint…"   56 seconds ago      Up 16 seconds       22/tcp, 0.0.0.0:3000->3000/tcp gitea-postgres_gitea_1
-86acc768453e        postgres:alpine      "docker-entrypoint.s…"   57 seconds ago      Up 17 seconds       5432/tcp                       gitea-postgres_db_1
-```
 
 Navigate to `http://localhost:3000` in your web browser to access the installed
 Gitea service.
@@ -58,10 +72,15 @@ Gitea service.
 Stop and remove the containers
 
 ```
-$ docker compose down
+$ podman pod stop gitea
+$ podman pod rm gitea
 ```
 
-To remove all Gitea data, delete the named volumes by passing the `-v` parameter:
+To remove all Gitea data, delete the named volumes:
 ```
-$ docker compose down -v
+$ podman volume ls
+DRIVER      VOLUME NAME
+local       git_data
+local       db_data
+$ podman volume rm db_data git_data
 ```

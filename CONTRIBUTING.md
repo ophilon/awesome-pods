@@ -4,11 +4,11 @@ Contributions should be made via pull requests. Pull requests will be reviewed b
 
 The goal of the **Awesome pods** is to provide a curated list of application samples that can be easily deployed with [podman kube play](https://docs.podman.io/en/latest/markdown/podman-kube.1.html).
 
-## Two ways migrate from compose.yaml to kube.yaml
+## Three ways migrate from compose.yaml to kube.yaml
 
 This project started as fork of [Docker Compose](https://github.com/docker/compose). Authors did a great job, original code saved in the **compose** branch - you can check it out any time. However, all compose.yaml configs kept and sometimes will work correctly with `podman-compose` command. The status of [podman-compose project](https://github.com/containers/podman-compose) well explained by [Matthew Heon](https://www.redhat.com/en/blog/podman-compose-docker-compose). The power of podman it's compatibility with some k8s API's, which allows smooth migration to kubernetes. So, let's start accustom yourself to brave new world of kuber.
 
-### 1. Create pod and add containers via podman commands:
+### 1. Create pod and add containers via podman commands, see folder [wordpress-mysql]:(wordpress-mysql)
 
 1. for convenience, move app specific variables from compose.yaml into .env files, for example:
 
@@ -30,7 +30,7 @@ $ podman pod create --name wpod -p 8080:80
 
 ```
 $ podman run -d --pod wpod --env-file .env.db --name=db docker.io/library/mariadb:latest
-$ podman run -d --pod=wpod --env-file .env.wp --name=web docker.io/library/wordpress:latest
+$ podman run -d --pod wpod --env-file .env.wp --name=web docker.io/library/wordpress:latest
 ```
 
 4. check pod status
@@ -54,16 +54,16 @@ $ podman generate kube wpod|tee kube.yaml
 ```
 $ podman pod rm wpod
 $ podman volume ls
-$ podman volume rm wpod-db-data wpod-web-data
+$ podman volume rm data web
 ```
 
-7. run podman kube play kube.yaml
+7. kube play new kube.yaml
 
 ```
 $ podman kube play kube.yaml
 ```
 
-### 2. Create new kube.yaml from below template
+### 2. Create new kube.yaml from below template. May need some additional commands to build con tainers from code, see proper README.md.
 
 ```
 $ cat kube.template.yaml
@@ -108,6 +108,45 @@ spec:
   - name: web-pvc
     persistentVolumeClaim:
       claimName: web
+```
+
+### 3. Use [podlet tool](https://github.com/containers/podlet) to automate migration process from `docker compose` to `podman kube play` config
+
+1. copy original compose.yaml into new pod.yaml - we have to delete some incompatible options, podlet v.0.3.0 still needs some manual tweaks, see examples below.
+
+```
+$ podlet compose --kube pod.yaml
+Error: 
+   0: error converting compose file
+   1: error converting compose file into Kubernetes YAML
+   2: `name` is required
+```
+
+2. add `name: gitea` as first line in pod.yaml, see more in [gitea-postgres/README.md](gitea-postgres/README.md), and repeat above command for next incompatible options. Here are some:
+
+```
+Error:
+... Kubernetes pods do not support per container `restart` options
+... `expose` is not supported for Kubernetes pod containers
+```
+
+3. after fixing error messages run command with `-f .` option to generate 2 files:
+
+```$ podlet -f. compose --kube pod.yaml 
+Wrote to file: ./gitea.kube
+Wrote to file: ./gitea-kube.yaml
+```
+
+4. check generated file:
+
+```
+$ podman kube play gitea-kube.yaml
+$ podman ps -ap
+CONTAINER ID  IMAGE                                    COMMAND               CREATED         STATUS         PORTS                             NAMES               POD ID        PODNAME
+03ab6362206b  localhost/podman-pause:5.4.0-1739232000                        56 seconds ago  Up 57 seconds  0.0.0.0:3000->3000/tcp            9e01104d3505-infra  9e01104d3505  gitea
+62c44db05dca  docker.io/gitea/gitea:latest             /usr/bin/s6-svsca...  56 seconds ago  Up 57 seconds  0.0.0.0:3000->3000/tcp, 22/tcp    gitea-gitea         9e01104d3505  gitea
+a999254d0928  docker.io/library/postgres:alpine        postgres              56 seconds ago  Up 57 seconds  0.0.0.0:3000->3000/tcp, 5432/tcp  gitea-db            9e01104d3505  gitea
+
 ```
 
 ## Missing an example?

@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: gitea
+spec:
+  containers:
+  - env:
+    - name: DB_TYPE
+      value: postgres
+    - name: DB_HOST
+      value: db:5432
+    - name: DB_NAME
+      value: gitea
+    - name: DB_USER
+      value: gitea
+    - name: DB_PASSWD
+      value: gitea
+    image: gitea/gitea:latest
+    name: gitea
+    ports:
+    - containerPort: 3000
+      hostPort: 3000
+    volumeMounts:
+    - mountPath: /data
+      name: git_data
+  - env:
+    - name: POSTGRES_USER
+      value: gitea
+    - name: POSTGRES_PASSWORD
+      value: gitea
+    - name: POSTGRES_DB
+      value: gitea
+    image: postgres:alpine
+    name: db
+    volumeMounts:
+    - mountPath: /var/lib/postgresql/data
+      name: db_data
+  volumes:
+  - name: git_data
+    persistentVolumeClaim:
+      claimName: git_data
+  - name: db_data
+    persistentVolumeClaim:
+      claimName: db_data
