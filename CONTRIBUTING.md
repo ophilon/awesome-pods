@@ -63,7 +63,7 @@ $ podman volume rm data web
 $ podman kube play kube.yaml
 ```
 
-### 2. Create new kube.yaml from below template. May need some additional commands to build con tainers from code, see proper README.md.
+### 2. Create new kube.yaml from below template. May need some additional commands to build containers from code, see proper README.md.
 
 ```
 $ cat kube.template.yaml

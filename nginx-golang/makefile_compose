@@ -1,0 +1,30 @@
+THIS_FILE := $(lastword $(MAKEFILE_LIST))
+.PHONY: help build up start down destroy stop restart logs test ps stats shell
+help:
+	@echo -e "avalable targets:\n"
+	@make -pRrq -f $(THIS_FILE) : 2>/dev/null | grep -P '^\w+:'|sort 
+build:
+	docker compose	build $(c)
+up:
+	docker compose	up -d $(c)
+start:
+	docker compose	start $(c)
+down:
+	docker compose	down $(c)
+destroy:
+	docker compose	down -v $(c)
+stop:
+	docker compose	stop $(c)
+restart:
+	docker compose	stop $(c)
+	docker compose	up -d $(c)
+logs:
+	docker compose	logs --tail=100 -f $(c)
+test:
+	curl http://localhost:80
+ps:
+	docker compose	ps
+stats:
+	docker compose stats --no-stream
+shell:
+	docker exec -ti frontend /bin/sh

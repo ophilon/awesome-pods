@@ -1,0 +1,28 @@
+THIS_FILE := $(lastword $(MAKEFILE_LIST))
+.PHONY: help build up stop rm logs test ps stats
+help:
+	@echo -e "avalable targets:\n"
+	@make -pRrq -f $(THIS_FILE) : 2>/dev/null | grep -P '^\w+:'|sort 
+build: 
+	cd backend; buildah from --name backend scratch; \
+	  go build -v -o backend main.go; \
+	  buildah copy backend backend /usr/local/bin/backend; \
+	  buildah config --entrypoint '["/usr/local/bin/backend"]' backend; \
+	  buildah commit  backend backend:latest
+up:
+	podman kube play go-app-kube.yaml 
+rm:
+	podman pod rm go-app
+stop:
+	podman pod stop go-app
+logs:
+	podman pod logs go-app
+test:
+	curl http://localhost:8080
+ps:
+	podman ps -ap
+stats:
+	podman pod stats --no-stream
+clean:
+	rm backend/backend
+	podman system prune	
