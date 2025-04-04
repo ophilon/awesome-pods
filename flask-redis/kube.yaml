@@ -5,8 +5,8 @@ metadata:
 spec:
   containers:
     # flask container
-    - image: app
-      name: app 
+    - image: app2
+      name: app2
       ports:
         - containerPort: 8000
           hostPort: 8000
