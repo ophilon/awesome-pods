@@ -1,57 +1,31 @@
-## Compose sample application
-### Python/Flask application
+## Podman Kube application
 
-Project structure:
-```
-.
-├── compose.yaml
-├── app
-    ├── Dockerfile
-    ├── requirements.txt
-    └── app.py
+## Deploy
+
+You can deploy with Podman
 
 ```
-
-[_compose.yaml_](compose.yaml)
-```
-services: 
-  web: 
-    build:
-     context: app
-     target: builder
-    ports: 
-      - '8000:8000'
-```
-
-## Deploy with docker compose
-
-```
-$ docker compose up -d
-[+] Building 1.1s (16/16) FINISHED
- => [internal] load build definition from Dockerfile                                                                                                                                                                                       0.0s
-    ...                                                                                                                                         0.0s
- => => naming to docker.io/library/flask_web                                                                                                                                                                                               0.0s
-[+] Running 2/2
- ⠿ Network flask_default  Created                                                                                                                                                                                                          0.0s
- ⠿ Container flask-web-1  Started
+$: podman kube play play.yaml --build
+STEP 1/7: FROM python:3.10-alpine
+STEP 2/7: WORKDIR /app
+...
+Successfully tagged localhost/app:latest
 ```
 
 ## Expected result
 
-Listing containers must show one container running and the port mapping as below:
+Listing pods should show the running application
+
 ```
-$ docker compose ps
-NAME                COMMAND             SERVICE             STATUS              PORTS
-flask-web-1         "python3 app.py"    web                 running             0.0.0.0:8000->8000/tcp
+$: podman pod ps
+POD ID        NAME        STATUS      CREATED        INFRA ID      # OF CONTAINERS
+96a26d3b398e  flask       Running    2 minutes ago  1f2e5b472950  2
 ```
 
-After the application starts, navigate to `http://localhost:8000` in your web browser or run:
-```
-$ curl localhost:8000
-Hello World!
-```
+## Stop and remove the containers
 
-Stop and remove the containers
 ```
-$ docker compose down
+$: podman kube down play.yaml
+Pods stopped
+Pods removed
 ```

@@ -1,0 +1,12 @@
+FROM python:3.13-alpine
+
+# flask requires SIGINT to stop gracefully
+STOPSIGNAL "SIGINT"
+
+WORKDIR /app
+COPY app.py requirements.txt /app
+RUN --mount=type=cache,target=/root/.cache/pip \
+    pip3 install -r requirements.txt
+
+ENTRYPOINT ["python3"]
+CMD ["app.py"]

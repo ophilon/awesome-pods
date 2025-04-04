@@ -1,9 +1,12 @@
+name: flask-redis
 services:
   redis:
-    image: redislabs/redismod
+    image: docker.io/redis:alpine
+    container_name: redis
     ports:
       - '6379:6379'
   web:
+    container_name: flask-app
     build:
       context: .
       target: builder

@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: flask
+spec:
+  containers:
+    - image: app
+      name: app
+      ports:
+        - containerPort: 8000
+          hostPort: 8000
+      livenessProbe:
+        httpGet:
+          path: /
+          port: 8000
+        initialDelaySeconds: 5 # default is 0
+        periodSeconds: 30 # default is 10
