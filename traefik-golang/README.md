@@ -75,9 +75,9 @@ spec:
   - hostPath:
       path: ${XDG_RUNTIME_DIR}/podman/podman.sock
 ```
-Podman and it's companion buildah give you much more interesting practice. First of all, podman implements part of kubernetes API, see the [podman api specification](https://docs.podman.io/en/latest/_static/api.html?version=v5.4) for complete list, i.e. it can help you get familiar with some of kuber api resources. The buildah tool also gives new approach for building containers, see the [buildah tutorial](https://developers.redhat.com/blog/2021/01/11/getting-started-with-buildah).
+Podman and it's companion buildah give you much more interesting practice. First of all, podman implements part of kubernetes API, see the [podman api specification](https://docs.podman.io/en/latest/_static/api.html?version=v5.4) for complete list, i.e. it can help you get familiar with some of k8s api resources. The buildah tool also gives new approach for building containers, see the [buildah tutorial](https://developers.redhat.com/blog/2021/01/11/getting-started-with-buildah).
 
-Redirect Makefile to make_pods: `ls -s make_pods Makefile` and use `make` to explore it. Below are some comments.
+Redirect Makefile to make_pods: `ln -s make_pods Makefile` and use `make` to explore it. Below are some comments.
 
 ```
 $ nl make_pods 
@@ -111,7 +111,7 @@ $ nl make_pods
     28  shell:
     29          podman exec -ti go-app-traefik /bin/sh
 ```
-Line 5 defines the dependencies: target *back* will build the binary only if main.go code or make_pods itself newer than resulting binary.
+Line 5 defines the dependencies: target **back** will build the binary only if main.go code or make_pods itself newer than resulting binary.
 
 Line 6 deletes the container backend, with tiny `-` prefix to ignore error if no container named backend exists.
 
