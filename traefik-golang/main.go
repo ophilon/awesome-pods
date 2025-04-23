@@ -19,12 +19,12 @@ func handler(w http.ResponseWriter, r *http.Request) {
   \____\_______/
 
 	
-Hello from Docker!
+Hello from pod!
 
 `)
 }
 
 func main() {
 	http.HandleFunc("/", handler)
-	log.Fatal(http.ListenAndServe(":80", nil))
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }

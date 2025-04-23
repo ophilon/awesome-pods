@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: go-app
+spec:
+  containers:
+  - image: docker.io/library/traefik:latest
+    name: traefik
+    ports:
+    - containerPort: 8080
+      hostPort: 8080
+    volumeMounts:
+    - mountPath: ${XDG_RUNTIME_DIR}/podman/podman.sock
+      name: traefik-podman.sock
+  - image: localhost/backend:latest
+    name: backend
+  volumes:
+  - hostPath:
+      path: ${XDG_RUNTIME_DIR}/podman/podman.sock
+    name: traefik-podman.sock

@@ -1,18 +1,21 @@
 services:
   frontend:
-    image: traefik:2.6
-    command: --providers.docker --entrypoints.web.address=:80 --providers.docker.exposedbydefault=false
+    image: traefik:latest
+    container_name: traefik
+    command: --providers.docker --entrypoints.web.address=:8080 --providers.docker.exposedbydefault=false
     ports:
       # The HTTP port
-      - "80:80"
+      - "8080:8080"
     volumes:
       # So that Traefik can listen to the Docker events
       - /var/run/docker.sock:/var/run/docker.sock
     depends_on:
       - backend
   backend:
-    build: backend
+    build: .
+    image: backend
+    container_name: backend
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.go.rule=Path(`/`)"
-      - "traefik.http.services.go.loadbalancer.server.port=80"
+      - "traefik.http.services.go.loadbalancer.server.port=8080"

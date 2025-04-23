@@ -1,0 +1,25 @@
+.PHONY: help build up down stop restart logs test ps stats shell
+help:
+	@echo "make_compose avalable targets:\n"
+	@make -pRrq 2>/dev/null|grep -v ^Makefile|grep -P '^\w+:'|sort
+build:
+	docker compose build
+up:
+	docker compose up -d
+down:
+	docker compose down -v
+stop:
+	docker compose stop
+restart:
+	docker compose stop
+	docker compose up -d
+logs:
+	docker compose logs
+test:
+	curl localhost:8080
+ps:
+	docker compose ps -a
+stats:
+	docker compose stats --no-stream
+shell:
+	docker exec -ti traefik /bin/sh
