@@ -12,8 +12,10 @@ up:
 clean:
 	docker system prune -f
 commit: test
-	@read -p "Enter commit message:" mesg; \
+	git branch -v
+	@read -p "Enter commit message:" mesg;\
 	git commit -am "$$mesg"
+	git push
 down:
 	docker compose down -v
 stop:
