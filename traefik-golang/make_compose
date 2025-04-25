@@ -1,4 +1,4 @@
-.PHONY: help build up down stop restart logs test ps stats shell
+.PHONY: help build up down clean stop restart logs test ps stats shell
 help:
 	@echo "make sure you in proper docker context: ${CONTEXT}\n"
 	docker context use ${CONTEXT}
@@ -9,6 +9,11 @@ build:
 	docker compose build
 up:
 	docker compose up -d
+clean:
+	docker system prune -f
+commit: test
+	@read -p "Enter commit message:" mesg; \
+	git commit -am "$$mesg"
 down:
 	docker compose down -v
 stop:
