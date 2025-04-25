@@ -112,13 +112,4 @@ podman pod stop pod_name
 podman pod rm pod_name
 ```
 
-### Quickstart guides
-
-In addition to all the ready to run Compose samples listed above the folder [official-documentation-samples](official-documentation-samples/README.md) contains quickstart guides. Each of these step by step guides explain which files need to be created to build and run a Podman Pods application.
-
-## Contribute
-
-We welcome examples that help people understand how to use Podman Pods for
-common applications. Check the [Contribution Guide](CONTRIBUTING.md) for more details. 
-
 <!--lint disable awesome-toc-->
