@@ -1,5 +1,8 @@
 .PHONY: help build up down stop restart logs test ps stats shell
 help:
+	@echo "make sure you in proper docker context: ${CONTEXT}\n"
+	docker context use ${CONTEXT}
+	docker context ls 
 	@echo "make_compose avalable targets:\n"
 	@make -pRrq 2>/dev/null|grep -v ^Makefile|grep -P '^\w+:'|sort
 build:
@@ -16,7 +19,7 @@ restart:
 logs:
 	docker compose logs
 test:
-	curl localhost:8080
+	curl ${CONTEXT}:8080
 ps:
 	docker compose ps -a
 stats:
