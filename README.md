@@ -108,8 +108,12 @@ what is the expected output.
 To stop and remove all containers of the sample application run:
 
 ```console
-podman pod stop pod_name
-podman pod rm pod_name
+podman kube down kube.yaml
 ```
+
+## Contribute
+
+We welcome examples that help people understand how to use Podman Pods for
+common applications. Check the [Contribution Guide](CONTRIBUTING.md) for more details. 
 
 <!--lint disable awesome-toc-->
