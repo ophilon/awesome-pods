@@ -2,6 +2,8 @@
 help:
 	@echo "make sure you in proper docker context: ${DKR_CONTEXT}\n"
 	docker context use ${DKR_CONTEXT}
+	@echo 'make sure you are in proper docker context= "${DKR_CONTEXT}"'
+	docker context use ${DKR_CONTEXT}
 	docker context ls 
 	@echo "make_compose avalable targets:\n"
 	@make -pRrq 2>/dev/null|grep -v ^Makefile|grep -P '^\w+:'|sort
