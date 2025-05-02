@@ -1,13 +1,13 @@
 .PHONY: help build up down clean stop restart logs test ps stats shell
 help:
-	@echo "make sure you in proper docker context: ${CONTEXT}\n"
-	docker context use ${CONTEXT}
+	@echo "make sure you in proper docker context: ${DKR_CONTEXT}\n"
+	docker context use ${DKR_CONTEXT}
 	docker context ls 
 	@echo "make_compose avalable targets:\n"
 	@make -pRrq 2>/dev/null|grep -v ^Makefile|grep -P '^\w+:'|sort
-build:
+build: main.go make_pods
 	docker compose build
-up:
+up: build down
 	docker compose up -d
 clean:
 	docker system prune -f
@@ -26,7 +26,7 @@ restart:
 logs:
 	docker compose logs
 test:
-	curl ${CONTEXT}:8080
+	curl ${DKR_CONTEXT}:8080
 ps:
 	docker compose ps -a
 stats:
