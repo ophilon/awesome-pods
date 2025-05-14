@@ -10,11 +10,11 @@ spec:
     - containerPort: 8080
       hostPort: 8080
     volumeMounts:
-    - mountPath: ${XDG_RUNTIME_DIR}/podman/podman.sock
-      name: traefik-podman.sock
+    - mountPath: $XDG_RUNTIME_DIR/podman/podman.sock
+      name: podman.sock
   - image: localhost/backend:latest
     name: backend
   volumes:
   - hostPath:
-      path: ${XDG_RUNTIME_DIR}/podman/podman.sock
-    name: traefik-podman.sock
+      path: $XDG_RUNTIME_DIR/podman/podman.sock
+    name: podman.sock

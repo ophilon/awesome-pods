@@ -1,0 +1,40 @@
+.PHONY: help up back commit test clean down logs ps stats shell
+vshell = /bin/sh -c
+vhost = localhost
+workdir = ${HOME}/src/traefik-golang
+ifdef CONTAINER_HOST
+  vshell = ssh dev@fc42dev
+  vhost = fc42dev
+  workdir = /home/dev/src/traefik-golang
+  endif
+help:
+	@echo "make sure you are in proper podman system connection : ${CONTAINER_HOST}\n"
+	podman system connection list
+	@echo "make_pods avalable targets:\n"
+	@make -pRrq 2>/dev/null|grep -v ^Makefile|grep -P '^[\w]+:'|sort
+	@echo "make vars: ${vshell} ${vhost} ${workdir}"
+back: main.go make_pods.v2
+	${vshell} 'cd ${workdir} ; . ./buildah.cmd'
+down:
+	${vshell} 'cd ${workdir} ; envsubst < kube.yaml | podman kube down -'
+up: down
+	${vshell} 'cd ${workdir} ; envsubst < kube.yaml | podman kube play -'
+test:
+	curl ${vhost}:8080
+clean:
+	-rm back
+	podman system prune -f
+commit: test
+	git branch -v
+	git add .
+	@read -p "Enter commit message:" mesg;\
+	git commit -m "$$mesg"
+	git push
+logs:
+	podman pod logs go-app
+ps:
+	podman ps -ap
+stats:
+	podman stats --no-stream
+shell:
+	podman exec -ti go-app-traefik /bin/sh
