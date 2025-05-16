@@ -2,7 +2,7 @@
 help:
         @echo -e "make_pods avalable targets:\n"
         @make -pRrq 2>/dev/null|grep -v ^Makefile|grep -P '^\w+:'|sort
-back: main.go make_pods
+back: main.go make_pods.v0
         -buildah rm backend
         buildah from --name backend scratch
         CGO_ENABLED='0' go build -v -ldflags "-w -s" -o back main.go

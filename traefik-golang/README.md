@@ -2,20 +2,24 @@
 
 ### TRAEFIK proxy with GO backend
 
-For both deploys created `make` files: `make_compose` and `make_pods` accordingly, standard Makefile is the link to proper file. To explore both container tools, check your distribution and install docker, podman, buildah, make, go compiler, envsubst.
+For both deploys created `make` files: `make_compose` and 3 version of `make_pods` accordingly, standard Makefile is the link to proper file. To explore both container tools, check your distribution and install docker, podman, buildah, make, go compiler, envsubst. More detailed info, also some ideas regarding docker/podman perspective in [my blog](https://ophil.ru/blog/03.pipeline.html)(russian). 
 
 Project structure:
+
 ```
 .
+├── buildah.cmd
+├── compose.yaml
 ├── Containerfile
 ├── Dockerfile -> Containerfile
-├── Makefile -> make_pods
-├── README.md
-├── compose.yaml
 ├── kube.yaml
 ├── main.go
 ├── make_compose
-└── make_pods
+├── Makefile -> make_pods.v3
+├── make_pods.v0
+├── make_pods.v1
+├── make_pods.v2
+└── README.md
 ```
 
 ### docker compose setup
@@ -125,5 +129,3 @@ Line 11 commits resulting container to new image with tag `backend:latest`
 The target `up`, line 16, depends on target `down`, line 14, i.e. it first stops pod and deletes containers, if still running.
 
 The target `down` in line 15 substitutes global variable $XDG_RUNTIME_DIR from the user `env` and run `podman kube` commands with fixed kube.yaml from STDIN. The same for target `up`, see line 17: this is the specific of podman - it works completely in userspace, containers communicate via user's own podman.sock, `envsubst` makes pipeline UID aware. 
-
-

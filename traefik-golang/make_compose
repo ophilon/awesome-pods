@@ -1,9 +1,12 @@
-.PHONY: help build up down clean stop restart logs test ps stats shell
+.PHONY: help build up down clean commit stop restart logs test ps stats shell
+ifndef DKR_CONTEXT
+  DKR_CONTEXT = localhost
+  endif
 help:
-	@echo "make sure you in proper docker context: ${DKR_CONTEXT}\n"
+	@echo "make sure you in proper docker context: ${DKR_CONTEXT}"
 	docker context use ${DKR_CONTEXT}
 	docker context ls 
-	@echo "make_compose avalable targets:\n"
+	@echo "make_compose avalable targets:"
 	@make -pRrq 2>/dev/null|grep -v ^Makefile|grep -P '^\w+:'|sort
 build: main.go make_compose
 	docker compose build
