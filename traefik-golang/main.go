@@ -19,8 +19,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
   \____\_______/
 
 	
-Hello from pod! make v2
-
+Hello from pod! make_pods.v2 with git hook test #16
 `)
 }
 

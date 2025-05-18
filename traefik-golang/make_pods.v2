@@ -8,12 +8,12 @@ ifdef CONTAINER_HOST
   workdir = /home/dev/src/traefik-golang
   endif
 help:
-	@echo "make sure you are in proper podman system connection : ${CONTAINER_HOST}\n"
+	@echo "make sure you are in proper podman system connection : ${CONTAINER_HOST}"
 	podman system connection list
-	@echo "make_pods avalable targets:\n"
+	@echo "make_pods avalable targets:"
 	@make -pRrq 2>/dev/null|grep -v ^Makefile|grep -P '^[\w]+:'|sort
 	@echo "make vars: ${vshell} ${vhost} ${workdir}"
-back: main.go make_pods.v2
+back: main.go make_pods.v2 buildah.cmd
 	${vshell} 'cd ${workdir} ; . ./buildah.cmd'
 down:
 	${vshell} 'cd ${workdir} ; envsubst < kube.yaml | podman kube down -'
