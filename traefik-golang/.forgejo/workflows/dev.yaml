@@ -1,0 +1,21 @@
+name: runner workflow
+on: [push]
+
+jobs:
+  mise-env :
+    runs-on: fc42dev
+    defaults:
+      working-directory: ~dev/src
+    steps:
+      - name: "build and run service"
+        run: |
+          cd;pwd
+          eval "$(/var/home/dev/.local/bin/mise activate bash)"
+          mise -v ls
+          go version
+          cd ~dev/src/traefik-golang
+          export XDG_RUNTIME_DIR=/run/user/1001
+          make back
+          make up
+          make test
+          make clean
