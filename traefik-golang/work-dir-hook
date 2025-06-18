@@ -1,0 +1,16 @@
+#!/bin/sh
+#  local git build
+set -x
+WORK_TREE="/var/home/dev/src/traefik-golang"
+GIT_DIR="/var/home/dev/bare/dev/traefik-golang.git"
+echo "call vars:" $*
+while read oldrev newrev ref
+do
+  pwd;env|sort;
+  ls -l $WORK_TREE
+  x_br=$(echo $ref|cut -d/ -f3)
+  # upd. work tree
+  git --work-tree=$WORK_TREE --git-dir=$GIT_DIR checkout -f $x_br
+#  LOGFILE=$(date +%y%m%d_%H%M).${x_br}.log
+#  (cd $WORK_TREE && make back && make up && make test && make clean)|tee -a logs/$LOGFILE
+done
