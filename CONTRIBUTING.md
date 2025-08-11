@@ -6,7 +6,7 @@ The goal of the **Awesome pods** is to provide a curated list of application sam
 
 ## Three ways migrate from compose.yaml to kube.yaml
 
-This project started as fork of [Docker Compose](https://github.com/docker/compose). Authors did a great job, original code saved in the **compose** branch - you can check it out any time. However, all compose.yaml configs kept and sometimes will work correctly with `podman-compose` command. The status of [podman-compose project](https://github.com/containers/podman-compose) well explained by [Matthew Heon](https://www.redhat.com/en/blog/podman-compose-docker-compose). The power of podman it's compatibility with some k8s API's, which allows smooth migration to kubernetes. So, let's start accustom yourself to brave new world of kuber.
+This project started as fork of [awesome-compose](https://github.com/docker/awesome-compose). Authors did a great job, original code saved in the **compose** branch - you can check it out any time. However, all compose.yaml configs kept and sometimes will work correctly with `podman-compose` command. The status of [podman-compose project](https://github.com/containers/podman-compose) well explained by [Matthew Heon](https://www.redhat.com/en/blog/podman-compose-docker-compose). The power of podman it's compatibility with some k8s API's, which allows smooth migration to kubernetes. So, let's start accustom yourself to brave new world of kuber.
 
 ### 1. Create pod and add containers via podman commands, see folder `wordpress-mysql`
 
