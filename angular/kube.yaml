@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: angular-pod
+spec:
+  containers:
+    - name: web
+      image: docker.io/portainer/angular-builder
+      ports:
+        - containerPort: 4200
+          hostPort: 4200
+      volumeMounts:
+        - name: project-volume
+          mountPath: /project
+        - name: node-modules-volume
+          mountPath: /project/node_modules
+  volumes:
+    - name: project-volume
+      hostPath:
+        path: ./angular
+    - name: node-modules-volume
+      emptyDir: {}
