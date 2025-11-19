@@ -50,3 +50,26 @@ Stop and remove the containers
 ```
 $ docker compose down
 ```
+
+## Build image for Podman
+
+You can build and tag the Django image with `buildah` (or `podman build`) using the same `builder` stage as in `compose.yaml`:
+
+```
+$ buildah bud -t django-app:latest --target builder app
+```
+
+## Deploy in a pod with Podman
+
+After building the image, you can deploy the Django app with `podman kube play`:
+
+```
+$ podman kube play kube.yaml
+$ podman ps -ap
+```
+
+To stop and remove the pod:
+
+```
+$ podman kube down kube.yaml
+```

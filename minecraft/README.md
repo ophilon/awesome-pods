@@ -80,3 +80,19 @@ To delete all data, remove all named volumes by passing the -v arguments:
 ```
 $ docker compose down -v
 ```
+
+## Deploy in a pod with Podman
+
+For the Podman pod sample, game data is stored in a local `minecraft_data` directory next to `kube.yaml`:
+
+```
+$ mkdir -p ./minecraft_data
+$ podman kube play kube.yaml
+$ podman ps -ap
+```
+
+To stop and remove the pod:
+
+```
+$ podman kube down kube.yaml
+```

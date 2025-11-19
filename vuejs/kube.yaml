@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: vuejs
+spec:
+  containers:
+    - name: web
+      image: vuejs-app
+      ports:
+        - containerPort: 8080
+          hostPort: 8080
+      volumeMounts:
+        - name: project-volume
+          mountPath: /project
+        - name: node-modules-volume
+          mountPath: /project/node_modules
+      livenessProbe:
+        httpGet:
+          path: /
+          port: 8080
+        initialDelaySeconds: 5
+        periodSeconds: 30
+  volumes:
+    - name: project-volume
+      hostPath:
+        path: ./vuejs
+    - name: node-modules-volume
+      emptyDir: {}

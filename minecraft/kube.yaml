@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: minecraft
+spec:
+  restartPolicy: Always
+  containers:
+    - name: minecraft
+      image: itzg/minecraft-server
+      env:
+        - name: EULA
+          value: "TRUE"
+      ports:
+        - containerPort: 25565
+          hostPort: 25565
+      resources:
+        limits:
+          memory: "1500Mi"
+      volumeMounts:
+        - name: minecraft-data
+          mountPath: /data
+  volumes:
+    - name: minecraft-data
+      hostPath:
+        path: ./minecraft_data

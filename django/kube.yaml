@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: django
+spec:
+  containers:
+    - name: web
+      image: django-app
+      ports:
+        - containerPort: 8000
+          hostPort: 8000
+      livenessProbe:
+        httpGet:
+          path: /
+          port: 8000
+        initialDelaySeconds: 5
+        periodSeconds: 30

@@ -59,3 +59,26 @@ Stopping vuejs_web_1 ... done
 Removing vuejs_web_1 ... done
 Removing network vuejs_default
 ```
+
+## Build image for Podman
+
+You can build and tag the VueJS image with `buildah` (or `podman build`):
+
+```
+$ buildah bud -t vuejs-app:latest --target development vuejs
+```
+
+## Deploy in a pod with Podman
+
+After building the image, you can deploy the VueJS app with `podman kube play`:
+
+```
+$ podman kube play kube.yaml
+$ podman ps -ap
+```
+
+To stop and remove the pod:
+
+```
+$ podman kube down kube.yaml
+```

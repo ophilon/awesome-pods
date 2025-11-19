@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: sparkjava
+spec:
+  containers:
+    - name: sparkjava
+      image: sparkjava-app
+      ports:
+        - containerPort: 8080
+          hostPort: 8080
+      livenessProbe:
+        httpGet:
+          path: /
+          port: 8080
+        initialDelaySeconds: 5
+        periodSeconds: 30

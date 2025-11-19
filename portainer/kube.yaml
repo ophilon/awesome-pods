@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: portainer
+spec:
+  restartPolicy: Always
+  containers:
+    - name: portainer
+      image: portainer/portainer-ce:alpine
+      args:
+        - "-H"
+        - "unix://$XDG_RUNTIME_DIR/podman/podman.sock"
+      ports:
+        - containerPort: 9000
+          hostPort: 9000
+      volumeMounts:
+        - name: podman-sock
+          mountPath: $XDG_RUNTIME_DIR/podman/podman.sock
+        - name: portainer-data
+          mountPath: /data
+  volumes:
+    - name: podman-sock
+      hostPath:
+        path: $XDG_RUNTIME_DIR/podman/podman.sock
+    - name: portainer-data
+      hostPath:
+        path: ./portainer_data

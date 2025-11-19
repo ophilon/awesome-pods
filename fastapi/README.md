@@ -51,3 +51,26 @@ Stop and remove the containers
 ```
 $ docker compose down
 ```
+
+## Build image for Podman
+
+You can build and tag the FastAPI image with `buildah` (or `podman build`):
+
+```
+$ buildah bud -t fastapi-app:latest --target builder .
+```
+
+## Deploy in a pod with Podman
+
+After building the image, you can deploy the FastAPI app with `podman kube play`:
+
+```
+$ podman kube play kube.yaml
+$ podman ps -ap
+```
+
+To stop and remove the pod:
+
+```
+$ podman kube down kube.yaml
+```

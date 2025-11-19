@@ -50,6 +50,23 @@ $ docker compose down
 $ docker compose down -v
 ```
 
+## Deploy in a pod with Podman
+
+This Podman pod sample runs Portainer against the Podman API socket and stores its data in a local `portainer_data` directory:
+
+```
+$ mkdir -p ./portainer_data
+# Make sure the Podman API service is running (for example: podman system service -t 0 &)
+$ podman kube play kube.yaml
+$ podman ps -ap
+```
+
+To stop and remove the pod:
+
+```
+$ podman kube down kube.yaml
+```
+
 ## Troubleshooting
 - Select the correct image for your OS. You can take a look at the published tags at [DockerHub](https://hub.docker.com/r/portainer/portainer-ce/tags)
   

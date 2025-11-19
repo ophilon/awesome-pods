@@ -1,0 +1,58 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: wireguard
+spec:
+  restartPolicy: Always
+  securityContext:
+    sysctls:
+      - name: net.ipv4.conf.all.src_valid_mark
+        value: "1"
+  containers:
+    - name: wireguard
+      image: linuxserver/wireguard
+      securityContext:
+        capabilities:
+          add:
+            - NET_ADMIN
+            - SYS_MODULE
+      env:
+        - name: PUID
+          value: "1000"
+        - name: PGID
+          value: "1000"
+        - name: TZ
+          value: "Etc/UTC"
+        - name: SERVERURL
+          value: "your-domain.dyndns.com"
+        - name: SERVERPORT
+          value: "51820"
+        - name: PEERS
+          value: "1"
+        - name: PEERDNS
+          value: "auto"
+        - name: INTERNAL_SUBNET
+          value: "10.13.13.0"
+        - name: ALLOWEDIPS
+          value: "0.0.0.0/0"
+      ports:
+        - containerPort: 51820
+          hostPort: 51820
+          protocol: UDP
+      volumeMounts:
+        - name: wireguard-config
+          mountPath: /config
+        - name: usr-src
+          mountPath: /usr/src
+        - name: lib-modules
+          mountPath: /lib/modules
+  volumes:
+    - name: wireguard-config
+      hostPath:
+        path: /usr/share/appdata/wireguard/config
+    - name: usr-src
+      hostPath:
+        path: /usr/src
+    - name: lib-modules
+      hostPath:
+        path: /lib/modules

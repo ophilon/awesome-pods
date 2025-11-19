@@ -55,3 +55,19 @@ $ docker compose down
 # To delete all data run:
 $ docker compose down -v
 ```
+
+## Deploy in a pod with Podman
+
+For the Podman pod sample, media is mounted from a local `media` directory next to `kube.yaml`:
+
+```
+$ mkdir -p ./media
+$ podman kube play kube.yaml
+$ podman ps -ap
+```
+
+To stop and remove the pod:
+
+```
+$ podman kube down kube.yaml
+```

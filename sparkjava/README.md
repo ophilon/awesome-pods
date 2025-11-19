@@ -59,3 +59,26 @@ Stopping sparkjava_sparkjava_1 ... done
 Removing sparkjava_sparkjava_1 ... done
 Removing network sparkjava_default
 ```
+
+## Build image for Podman
+
+You can build and tag the Spark Java image with `buildah` (or `podman build`):
+
+```
+$ buildah bud -t sparkjava-app:latest sparkjava
+```
+
+## Deploy in a pod with Podman
+
+After building the image, you can deploy the Spark Java app with `podman kube play`:
+
+```
+$ podman kube play kube.yaml
+$ podman ps -ap
+```
+
+To stop and remove the pod:
+
+```
+$ podman kube down kube.yaml
+```

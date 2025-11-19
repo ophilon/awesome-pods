@@ -68,6 +68,21 @@ $ docker compose down
 $ docker compose down -v
 ```
 
+## Deploy in a pod with Podman
+
+You can run the Wireguard server as a Podman pod using the `kube.yaml` manifest (ensure the required kernel modules and headers are installed as in the compose example):
+
+```
+$ podman kube play kube.yaml
+$ podman ps -ap
+```
+
+To stop and remove the pod:
+
+```
+$ podman kube down kube.yaml
+```
+
 ## Troubleshooting
 
 ### - (Raspberry Pi) Kernel Headers

@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: plex
+spec:
+  restartPolicy: Always
+  containers:
+    - name: plex
+      image: linuxserver/plex:latest
+      env:
+        - name: VERSION
+          value: docker
+      ports:
+        - containerPort: 32400
+          hostPort: 32400
+      volumeMounts:
+        - name: media
+          mountPath: /media
+  volumes:
+    - name: media
+      hostPath:
+        path: ./media
