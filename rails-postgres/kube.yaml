@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: rails-postgres
+  labels:
+    app: rails-postgres
+spec:
+  restartPolicy: Always
+  containers:
+    - name: db
+      image: postgres
+      env:
+        - name: POSTGRES_PASSWORD
+          value: "password"
+      ports:
+        - containerPort: 5432
+      volumeMounts:
+        - name: db-data
+          mountPath: /var/lib/postgresql/data
+    - name: web
+      image: rails-postgres-app
+      command:
+        - bash
+        - -c
+        - "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+      ports:
+        - containerPort: 3000
+          hostPort: 3000
+      livenessProbe:
+        httpGet:
+          path: /
+          port: 3000
+        initialDelaySeconds: 10
+        periodSeconds: 30
+  volumes:
+    - name: db-data
+      emptyDir: {}

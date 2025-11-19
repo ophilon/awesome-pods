@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: prometheus-grafana
+  labels:
+    app: prometheus-grafana
+spec:
+  restartPolicy: Always
+  containers:
+    - name: prometheus
+      image: prom/prometheus
+      args:
+        - '--config.file=/etc/prometheus/prometheus.yml'
+      ports:
+        - containerPort: 9090
+          hostPort: 9090
+      volumeMounts:
+        - name: prom-config
+          mountPath: /etc/prometheus
+        - name: prom-data
+          mountPath: /prometheus
+    - name: grafana
+      image: grafana/grafana
+      env:
+        - name: GF_SECURITY_ADMIN_USER
+          value: 'admin'
+        - name: GF_SECURITY_ADMIN_PASSWORD
+          value: 'grafana'
+      ports:
+        - containerPort: 3000
+          hostPort: 3000
+      volumeMounts:
+        - name: grafana-config
+          mountPath: /etc/grafana/provisioning/datasources
+  volumes:
+    - name: prom-config
+      hostPath:
+        path: ./prometheus
+    - name: prom-data
+      emptyDir: {}
+    - name: grafana-config
+      hostPath:
+        path: ./grafana

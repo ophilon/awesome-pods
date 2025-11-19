@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: wasmedge-mysql-nginx
+  labels:
+    app: wasmedge-mysql-nginx
+spec:
+  restartPolicy: Always
+  containers:
+    - name: db
+      image: mariadb:10.9
+      env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "whalehello"
+      ports:
+        - containerPort: 3306
+    - name: backend
+      image: demo-microservice
+      env:
+        - name: DATABASE_URL
+          value: "mysql://root:whalehello@db:3306/mysql"
+        - name: RUST_BACKTRACE
+          value: "full"
+      ports:
+        - containerPort: 8080
+          hostPort: 8080
+    - name: frontend
+      image: nginx:alpine
+      ports:
+        - containerPort: 80
+          hostPort: 8090
+      volumeMounts:
+        - name: frontend-static
+          mountPath: /usr/share/nginx/html
+  volumes:
+    - name: frontend-static
+      hostPath:
+        path: ./frontend

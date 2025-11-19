@@ -1,0 +1,56 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nextcloud-redis-mariadb
+  labels:
+    app: nextcloud-redis-mariadb
+spec:
+  restartPolicy: Always
+  containers:
+    - name: db
+      image: mariadb:10.5
+      args:
+        - "--transaction-isolation=READ-COMMITTED"
+        - "--binlog-format=ROW"
+      env:
+        - name: MYSQL_DATABASE
+          value: "nextcloud"
+        - name: MYSQL_USER
+          value: "nextcloud"
+        - name: MYSQL_PASSWORD
+          value: "nextcloud"
+        - name: MYSQL_ROOT_PASSWORD
+          value: "nextcloud"
+      ports:
+        - containerPort: 3306
+      volumeMounts:
+        - name: db-data
+          mountPath: /var/lib/mysql
+    - name: redis
+      image: redis:alpine
+      ports:
+        - containerPort: 6379
+    - name: nc
+      image: nextcloud:apache
+      env:
+        - name: REDIS_HOST
+          value: "redis"
+        - name: MYSQL_HOST
+          value: "db"
+        - name: MYSQL_DATABASE
+          value: "nextcloud"
+        - name: MYSQL_USER
+          value: "nextcloud"
+        - name: MYSQL_PASSWORD
+          value: "nextcloud"
+      ports:
+        - containerPort: 80
+          hostPort: 80
+      volumeMounts:
+        - name: nc-data
+          mountPath: /var/www/html
+  volumes:
+    - name: db-data
+      emptyDir: {}
+    - name: nc-data
+      emptyDir: {}

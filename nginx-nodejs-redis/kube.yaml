@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-nodejs-redis
+  labels:
+    app: nginx-nodejs-redis
+spec:
+  restartPolicy: Always
+  containers:
+    - name: redis
+      image: redislabs/redismod
+      ports:
+        - containerPort: 6379
+          hostPort: 6379
+    - name: web1
+      image: nginx-nodejs-redis-web
+      env:
+        - name: REDIS_HOST
+          value: "redis"
+      ports:
+        - containerPort: 5000
+          hostPort: 81
+      livenessProbe:
+        httpGet:
+          path: "/"
+          port: 5000
+        initialDelaySeconds: 10
+        periodSeconds: 30
+    - name: web2
+      image: nginx-nodejs-redis-web
+      env:
+        - name: REDIS_HOST
+          value: "redis"
+      ports:
+        - containerPort: 5000
+          hostPort: 82
+      livenessProbe:
+        httpGet:
+          path: "/"
+          port: 5000
+        initialDelaySeconds: 10
+        periodSeconds: 30
+    - name: nginx
+      image: nginx-nodejs-redis-nginx
+      ports:
+        - containerPort: 80
+          hostPort: 80

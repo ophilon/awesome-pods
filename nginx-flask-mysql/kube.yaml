@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-flask-mysql
+  labels:
+    app: nginx-flask-mysql
+spec:
+  restartPolicy: Always
+  containers:
+    - name: db
+      image: mariadb:10-focal
+      args:
+        - '--default-authentication-plugin=mysql_native_password'
+      env:
+        - name: MYSQL_DATABASE
+          value: 'example'
+        - name: MYSQL_ROOT_PASSWORD
+          value: 'example'
+      ports:
+        - containerPort: 3306
+      volumeMounts:
+        - name: db-data
+          mountPath: /var/lib/mysql
+    - name: backend
+      image: nginx-flask-backend
+      ports:
+        - containerPort: 8000
+          hostPort: 8000
+      livenessProbe:
+        httpGet:
+          path: /
+          port: 8000
+        initialDelaySeconds: 10
+        periodSeconds: 30
+    - name: proxy
+      image: nginx-flask-proxy
+      ports:
+        - containerPort: 80
+          hostPort: 80
+  volumes:
+    - name: db-data
+      emptyDir: {}

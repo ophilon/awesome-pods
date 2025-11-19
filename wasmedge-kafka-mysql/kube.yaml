@@ -1,0 +1,63 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: wasmedge-kafka-mysql
+  labels:
+    app: wasmedge-kafka-mysql
+spec:
+  restartPolicy: Always
+  containers:
+    - name: redpanda
+      image: docker.redpanda.com/vectorized/redpanda:v22.2.2
+      args:
+        - redpanda
+        - start
+        - --smp
+        - "1"
+        - --overprovisioned
+        - --node-id
+        - "0"
+        - --kafka-addr
+        - PLAINTEXT://0.0.0.0:29092,OUTSIDE://0.0.0.0:9092
+        - --advertise-kafka-addr
+        - PLAINTEXT://redpanda:29092,OUTSIDE://redpanda:9092
+        - --pandaproxy-addr
+        - 0.0.0.0:8082
+        - --advertise-pandaproxy-addr
+        - localhost:8082
+      ports:
+        - containerPort: 8081
+          hostPort: 8081
+        - containerPort: 8082
+          hostPort: 8082
+        - containerPort: 9092
+          hostPort: 9092
+        - containerPort: 9644
+          hostPort: 9644
+        - containerPort: 29092
+          hostPort: 29092
+      volumeMounts:
+        - name: kafka-data
+          mountPath: /app
+    - name: etl
+      image: etl-kafka
+      env:
+        - name: DATABASE_URL
+          value: "mysql://root:whalehello@db:3306/mysql"
+        - name: KAFKA_URL
+          value: "kafka://redpanda:9092/order"
+        - name: RUST_BACKTRACE
+          value: "full"
+        - name: RUST_LOG
+          value: "info"
+    - name: db
+      image: mariadb:10.9
+      env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "whalehello"
+      ports:
+        - containerPort: 3306
+  volumes:
+    - name: kafka-data
+      hostPath:
+        path: ./kafka

@@ -1,0 +1,74 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pihole-cloudflared
+  labels:
+    app: pihole-cloudflared
+spec:
+  restartPolicy: Always
+  containers:
+    - name: cloudflared
+      image: visibilityspots/cloudflared
+      env:
+        - name: TZ
+          value: "UTC"
+        - name: PORT
+          value: "5054"
+        - name: ADDRESS
+          value: "0.0.0.0"
+      ports:
+        - containerPort: 5054
+          hostPort: 5054
+          protocol: TCP
+        - containerPort: 5054
+          hostPort: 5054
+          protocol: UDP
+    - name: pihole
+      image: pihole/pihole:latest
+      env:
+        - name: TZ
+          value: "UTC"
+        - name: PIHOLE_DNS_
+          value: "172.20.0.2#5054;1.1.1.1"
+        - name: WEBPASSWORD
+          value: "changeme"
+        - name: REV_SERVER
+          value: "true"
+        - name: REV_SERVER_TARGET
+          value: "192.168.1.1"
+        - name: REV_SERVER_DOMAIN
+          value: "example.local"
+        - name: REV_SERVER_CIDR
+          value: "192.168.1.0/24"
+        - name: ServerIP
+          value: "127.0.0.1"
+      securityContext:
+        capabilities:
+          add:
+            - NET_ADMIN
+      ports:
+        - containerPort: 53
+          hostPort: 53
+          protocol: TCP
+        - containerPort: 53
+          hostPort: 53
+          protocol: UDP
+        - containerPort: 67
+          hostPort: 67
+          protocol: UDP
+        - containerPort: 80
+          hostPort: 8080
+        - containerPort: 443
+          hostPort: 8443
+      volumeMounts:
+        - name: pihole-etc
+          mountPath: /etc/pihole
+        - name: pihole-dnsmasq
+          mountPath: /etc/dnsmasq.d
+  volumes:
+    - name: pihole-etc
+      hostPath:
+        path: /etc/pihole
+    - name: pihole-dnsmasq
+      hostPath:
+        path: /etc/dnsmasq.d
